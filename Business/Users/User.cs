@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
+using Business.Organizations;
 using Business.RefreshTokens;
 
 namespace Business.Users;
@@ -32,10 +33,13 @@ public class User
     public Role Role { get; protected set; }
     
     public ICollection<RefreshToken> RefreshTokens { get; protected set; }
+    
+    public ICollection<Organization> Organizations { get; protected set; }
 
     public User()
     {
-        this.RefreshTokens = new List<RefreshToken>();
+        RefreshTokens = new List<RefreshToken>();
+        Organizations = new List<Organization>();
     }
 
     private User(string name, Email email, Password password, Role role)
@@ -52,6 +56,7 @@ public class User
         CreatedAt = DateTime.Now;
         Role = role;
         RefreshTokens = new List<RefreshToken>();
+        Organizations = new List<Organization>();
     }
 
     public static User Standard(string name, Email email, Password password)
@@ -75,6 +80,11 @@ public class User
         DeletedAt = DateTime.Now;
         Email = new Email($"{GetHashString(Email.Value)}@eightythree.io");
         Name = GetHashString(Name);
+    }
+
+    public void CreateOrganization(Organization organization)
+    {
+        Organizations.Add(organization);
     }
     
     private static byte[] GetHash(string inputString)

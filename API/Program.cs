@@ -2,6 +2,7 @@ using System.Text;
 using API.Users.GetUser;
 using Application;
 using Application.Accesses;
+using Application.Organizations.CreateOrganization;
 using Application.Services.Hashing;
 using Application.Services.Mailing;
 using Application.Services.Tokenizer;
@@ -12,6 +13,7 @@ using Application.Users.RecoverPassword;
 using Application.Users.ResetPassword;
 using Application.Users.SignUp;
 using Application.Users.UpdatePassword;
+using Business.Organizations;
 using Business.Users;
 using DatabaseByEntityFramework;
 using DatabaseByEntityFramework.RefreshTokens;
@@ -99,6 +101,8 @@ builder.Services.AddScoped<IUpdatePasswordRepository, UsersRepository>();
 
 builder.Services.AddScoped<IService<DeleteUserCommand, bool>, DeleteUserService>();
 builder.Services.AddScoped<IDeleteUserRepository, UsersRepository>();
+
+builder.Services.AddScoped<IService<CreateOrganizationCommand, Organization>, CreateOrganizationService>();
 
 builder.Services.AddScoped<IQuery<GetUserQuery, UserResult>>(service => 
     new UsersQueriesRepository(databaseConnectionString));
