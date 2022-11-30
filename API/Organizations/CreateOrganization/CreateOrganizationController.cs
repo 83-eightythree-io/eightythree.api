@@ -34,12 +34,7 @@ public class CreateOrganizationController : ApiController
     {
         try
         {
-            var userEmail = _httpContext.HttpContext?.User.Claims.SingleOrDefault(u => u.Type == ClaimTypes.Email)
-                ?.Value;
-            if (userEmail is null)
-                throw new UserNotAuthorizedException("User is not authorized");
-
-            var organization = _service.Execute(new CreateOrganizationCommand(userEmail, request.Name, request.Account, request.TermsAndConditionsAccepted));
+            var organization = _service.Execute(new CreateOrganizationCommand(GetUserEmail(), request.Name, request.Account, request.TermsAndConditionsAccepted));
 
             return Created(
                 $"{Location}/{organization.Id}",

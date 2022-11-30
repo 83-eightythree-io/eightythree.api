@@ -4,6 +4,8 @@ using System.Security.Cryptography;
 using System.Text;
 using Business.Organizations;
 using Business.RefreshTokens;
+using Business.UserOrganizations;
+using Business.Users.Exceptions;
 
 namespace Business.Users;
 
@@ -34,12 +36,12 @@ public class User
     
     public ICollection<RefreshToken> RefreshTokens { get; protected set; }
     
-    public ICollection<Organization> Organizations { get; protected set; }
+    public ICollection<UserOrganization> Organizations { get; protected set; }
 
     public User()
     {
         RefreshTokens = new List<RefreshToken>();
-        Organizations = new List<Organization>();
+        Organizations = new List<UserOrganization>();
     }
 
     private User(string name, Email email, Password password, Role role)
@@ -56,7 +58,7 @@ public class User
         CreatedAt = DateTime.Now;
         Role = role;
         RefreshTokens = new List<RefreshToken>();
-        Organizations = new List<Organization>();
+        Organizations = new List<UserOrganization>();
     }
 
     public static User Standard(string name, Email email, Password password)
@@ -84,7 +86,7 @@ public class User
 
     public void CreateOrganization(Organization organization)
     {
-        Organizations.Add(organization);
+        Organizations.Add(UserOrganization.Admin(this, organization));
     }
     
     private static byte[] GetHash(string inputString)

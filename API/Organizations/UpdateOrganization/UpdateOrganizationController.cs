@@ -22,14 +22,24 @@ public class UpdateOrganizationController : ApiController
     [HttpPatch, Route("/organizations/{id:guid}")]
     [Produces("application/json")]
     [OpenApiTag("Organizations")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult Execute(Guid id, [FromBody] UpdateOrganizationRequest request)
     {
         try
         {
-            _service.Execute(new UpdateOrganizationCommand(id, request.Name, request.Account));
-            return NoContent();
+            var organization = _service.Execute(new UpdateOrganizationCommand(GetUserEmail(), id, request.Name, request.Account));
+
+            return Ok(new
+            {
+                id = organization.Id,
+                links = new
+                {
+                    self = $"{Location}/{organization.Id}",
+                    href = $"{Path}/{organization.Id}",
+                    rel = $"{Path}"
+                }
+            });
         }
         catch (Exception)
         {

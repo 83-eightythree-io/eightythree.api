@@ -25,4 +25,8 @@ public class Organization
         Account = account;
         TermsAndConditionsAccepted = termsAndConditionsAccepted;
     }
+
+    public void UpdateName(string name) => Name = name;
+
+    public void UpdateAccount(string account) => Account = account;
 }

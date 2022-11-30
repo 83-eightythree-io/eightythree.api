@@ -2,10 +2,12 @@ namespace Application.Organizations.DeleteOrganization;
 
 public class DeleteOrganizationCommand
 {
-    public Guid Id { get; }
+    public string UserEmail { get; }
+    public Guid OrgnizationId { get; }
     
-    public DeleteOrganizationCommand(Guid id)
+    public DeleteOrganizationCommand(string userEmail, Guid id)
     {
-        Id = id;
+        UserEmail = userEmail;
+        OrgnizationId = id;
     }
 }
